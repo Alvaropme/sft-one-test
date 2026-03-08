@@ -1,5 +1,5 @@
 export const environment = {
-  production: true,
+  production: false,
   api: {
     baseUrl: 'https://jsonplaceholder.typicode.com',
     todosEndpoint: '/todos',
