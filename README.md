@@ -1,59 +1,221 @@
-# SftOneDemo
+# Angular Todo Application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.5.
+A modern, production-ready Todo application built with Angular 19+ demonstrating professional architecture, best practices, and clean code.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- **CRUD Operations**: Create, Read, Update, and Delete todos
+- **Filtering**: Filter todos by status (completed/pending) and search
+- **Pagination**: Paginated todo list
+- **Favorites**: Mark todos as favorites (persisted in localStorage)
+- **User Preferences**: Theme and language settings (stored in cookies)
+- **State Management**: Angular Signals-based reactive state
+- **Error Handling**: Global error handling with user-friendly messages
+- **HTTP Interceptors**: Auth and error interceptors
+- **Lazy Loading**: Feature modules loaded on demand
+- **Responsive UI**: Material Design with Angular Material
 
-```bash
-ng serve
+## Technologies Used
+
+- **Angular 19+**: Latest Angular with standalone components
+- **TypeScript**: Strict mode with strong typing
+- **Angular Material**: Modern Material Design components
+- **RxJS**: Reactive programming
+- **Angular Signals**: Reactive state management
+- **Jest**: Unit testing framework
+- **ESLint**: Code linting
+- **SCSS**: CSS preprocessor
+
+## Project Structure
+
+```
+src/app
+├── core/                    # Global singleton services
+│   ├── config/             # Application configuration
+│   ├── error-handler/      # Global error handler
+│   ├── interceptors/       # HTTP interceptors (auth, error)
+│   └── services/           # Core services (storage, logging, error)
+├── features/                # Feature modules
+│   ├── settings/           # User preferences
+│   └── todos/              # Todo feature
+│       ├── components/     # Todo components
+│       ├── models/         # TypeScript interfaces
+│       ├── pages/          # Page components
+│       ├── services/       # Feature services
+│       └── store/          # Signals-based store
+├── layout/                  # Layout components
+└── shared/                  # Shared/reusable components
+    └── components/         # Reusable UI components
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Architecture
 
-## Code scaffolding
+### State Management (Signals)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+The application uses Angular Signals for reactive state management:
 
-```bash
-ng generate component component-name
+- **Signals**: Primitive reactive values (`signal`)
+- **Computed**: Derived values (`computed`)
+- **Effects**: Side effects (`effect`)
+
+Example from `TodoStore`:
+
+```typescript
+readonly todos = computed(() => this.todosSignal());
+readonly loading = computed(() => this.loadingSignal());
+readonly filteredTodos = computed(() => {
+  const todos = this.todosSignal();
+  const favorites = this.favoritesSignal();
+  return todos.map(todo => ({
+    ...todo,
+    isFavorite: favorites.includes(todo.id),
+  }));
+});
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Lazy Loading
 
-```bash
-ng generate --help
+Routes are lazy loaded for better performance:
+
+```typescript
+{
+  path: 'todos',
+  loadChildren: () => import('./features/todos/todos.routes').then(m => m.todosRoutes),
+}
 ```
 
-## Building
+### HTTP Interceptors
 
-To build the project run:
+Two interceptors are configured:
 
-```bash
-ng build
-```
+1. **AuthInterceptor**: Adds Bearer token to requests
+2. **ErrorInterceptor**: Handles HTTP errors globally
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+### Storage Service
 
-## Running unit tests
+Manages three storage types:
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- **LocalStorage**: Favorites and cached todos
+- **SessionStorage**: Temporary filters
+- **Cookies**: User preferences (theme, language)
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+## Installation
 
 ```bash
-ng e2e
+# Install dependencies
+npm install
+
+# Start development server
+npm start
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+The app will be available at `http://localhost:4200`
 
-## Additional Resources
+## Testing
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```bash
+# Run unit tests
+npm test
+
+# Run tests with coverage
+npm test:coverage
+
+# Run tests in watch mode
+npm test:watch
+```
+
+## Code Quality
+
+```bash
+# Run ESLint
+npm run lint
+
+# Format code with Prettier
+npm run format
+```
+
+## API Integration
+
+This application uses the JSONPlaceholder API:
+
+- **Base URL**: `https://jsonplaceholder.typicode.com`
+- **Endpoints**:
+  - `GET /todos` - List all todos
+  - `GET /todos/:id` - Get single todo
+  - `POST /todos` - Create todo
+  - `PUT /todos/:id` - Update todo
+  - `DELETE /todos/:id` - Delete todo
+
+## Technical Decisions
+
+### Standalone Components
+
+All components use the standalone API, eliminating the need for NgModules:
+
+```typescript
+@Component({
+  selector: 'app-todo-item',
+  standalone: true,
+  imports: [CommonModule, MatCardModule, ...],
+  ...
+})
+export class TodoItemComponent { }
+```
+
+### Control Flow Syntax
+
+Using modern Angular control flow:
+
+```html
+@if (loading()) {
+  <app-loading></app-loading>
+}
+@for (todo of todos(); track todo.id) {
+  <app-todo-item [todo]="todo"></app-todo-item>
+}
+```
+
+### OnPush Change Detection
+
+All components use `ChangeDetectionStrategy.OnPush` for performance:
+
+```typescript
+@Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  ...
+})
+```
+
+### Typed Forms
+
+Using Angular's typed reactive forms:
+
+```typescript
+form = this.fb.group({
+  title: ['', [Validators.required, Validators.minLength(3)]],
+  userId: [1, [Validators.required, Validators.min(1)]],
+  completed: [false],
+});
+```
+
+## Component Communication
+
+The application demonstrates multiple communication patterns:
+
+1. **Input/Output**: Parent-child component communication
+2. **Signals**: Service-based state sharing via signals
+3. **ViewChild**: Direct component access
+
+## Build
+
+```bash
+# Build for production
+npm run build
+
+# Build for development
+npm run watch
+```
+
+## License
+
+MIT

@@ -6,8 +6,8 @@ export class GlobalErrorHandler implements ErrorHandler {
   private loggingService = inject(LoggingService);
 
   handleError(error: Error): void {
-    const message = error.message ?? 'Unknown error occurred';
-    const stack = error.stack ?? 'No stack trace available';
+    const message = error.message || 'Unknown error occurred';
+    const stack = error.stack || 'No stack trace available';
 
     this.loggingService.error(`Unhandled Error: ${message}`, {
       name: error.name,

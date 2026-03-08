@@ -1,18 +1,21 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-    {
-        path: '',
-        loadComponent: () =>
-            import('./layouts/main-layout/main-layout.component').then(
-                (m) => m.MainLayoutComponent
-            ),
-        children: [
-            {
-                path: '',
-                redirectTo: 'tasks',
-                pathMatch: 'full'
-            }
-        ]
-    }
+  {
+    path: '',
+    redirectTo: 'todos',
+    pathMatch: 'full',
+  },
+  {
+    path: 'todos',
+    loadChildren: () => import('./features/todos/todos.routes').then(m => m.todosRoutes),
+  },
+  {
+    path: 'settings',
+    loadComponent: () => import('./features/settings/settings.component').then(m => m.SettingsPageComponent),
+  },
+  {
+    path: '**',
+    redirectTo: 'todos',
+  },
 ];
