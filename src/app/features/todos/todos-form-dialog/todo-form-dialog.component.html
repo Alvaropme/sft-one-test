@@ -1,0 +1,6 @@
+<h2 mat-dialog-title>{{ data.mode === 'create' ? 'Create Todo' : 'Edit Todo' }}</h2>
+<mat-dialog-content>
+    <app-todo-form [todo]="data.todo ?? null" [existingTitles]="data.existingTitles" (create)="onCreate($event)"
+        (update)="onUpdate($event)" (cancel)="dialogRef.close()">
+    </app-todo-form>
+</mat-dialog-content>

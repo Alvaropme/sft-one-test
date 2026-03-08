@@ -1,0 +1,45 @@
+<div class="filters-container">
+    <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search</mat-label>
+        <input matInput [ngModel]="search()" (ngModelChange)="onSearchChange($event)" placeholder="Search todos...">
+        <mat-icon matPrefix>search</mat-icon>
+        @if (search()) {
+        <button matSuffix mat-icon-button (click)="clearSearch()">
+            <mat-icon>close</mat-icon>
+        </button>
+        }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="status-field">
+        <mat-label>Status</mat-label>
+        <mat-select [ngModel]="status()" (ngModelChange)="onStatusChange($event)">
+            <mat-option value="">All</mat-option>
+            <mat-option value="true">Completed</mat-option>
+            <mat-option value="false">Pending</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <div class="active-filters">
+        @if (search() || status()) {
+        <mat-chip-set>
+            @if (search()) {
+            <mat-chip (removed)="clearSearch()">
+                Search: {{ search() }}
+                <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip>
+            }
+            @if (status()) {
+            <mat-chip (removed)="clearStatus()">
+                Status: {{ status() === 'true' ? 'Completed' : 'Pending' }}
+                <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip>
+            }
+        </mat-chip-set>
+        <button mat-button (click)="clearAllFilters()">Clear All</button>
+        }
+    </div>
+</div>

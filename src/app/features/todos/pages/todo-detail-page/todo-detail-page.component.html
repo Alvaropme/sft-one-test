@@ -1,0 +1,58 @@
+<div class="detail-page">
+    <mat-toolbar color="primary">
+        <button mat-icon-button routerLink="/todos">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <span>Todo Detail</span>
+    </mat-toolbar>
+
+    <div class="content">
+        @if (store.loading()) {
+        <app-loading message="Loading todo..."></app-loading>
+        }
+
+        @if (!store.loading() && store.selectedTodo()) {
+        <mat-card class="detail-card">
+            <mat-card-header>
+                <mat-card-title>Todo #{{ store.selectedTodo()?.id }}</mat-card-title>
+                <mat-card-subtitle>
+                    User ID: {{ store.selectedTodo()?.userId }}
+                </mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="todo-status">
+                    <mat-checkbox [checked]="store.selectedTodo()?.completed" (change)="toggleComplete()"
+                        color="primary">
+                        Completed
+                    </mat-checkbox>
+
+                    <span class="status-badge" [class.completed]="store.selectedTodo()?.completed">
+                        {{ store.selectedTodo()?.completed ? 'Completed' : 'Pending' }}
+                    </span>
+                </div>
+
+                <div class="todo-title">
+                    <h2>{{ store.selectedTodo()?.title }}</h2>
+                </div>
+
+                <div class="todo-meta">
+                    <p><strong>Created:</strong> {{ createdDate() }}</p>
+                    <p><strong>Favorite:</strong> {{ isFavorite() ? 'Yes' : 'No' }}</p>
+                </div>
+            </mat-card-content>
+
+            <mat-card-actions>
+                <button mat-button color="primary" (click)="toggleFavorite()">
+                    <mat-icon>{{ isFavorite() ? 'star' : 'star_border' }}</mat-icon>
+                    {{ isFavorite() ? 'Remove from favorites' : 'Add to favorites' }}
+                </button>
+                <button mat-button routerLink="/todos">
+                    <mat-icon>list</mat-icon>
+                    Back to list
+                </button>
+            </mat-card-actions>
+        </mat-card>
+        }
+    </div>
+</div>
