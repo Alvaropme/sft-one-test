@@ -1,5 +1,4 @@
 import { Injectable, inject } from '@angular/core';
-import { StorageService } from './storage.service';
 
 export type LogLevel = 'log' | 'info' | 'warn' | 'error' | 'debug';
 
@@ -14,7 +13,6 @@ export interface LogEntry {
   providedIn: 'root',
 })
 export class LoggingService {
-  private storageService = inject(StorageService);
   private logs: LogEntry[] = [];
   private readonly maxLogs = 100;
 

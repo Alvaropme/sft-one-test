@@ -14,7 +14,6 @@ export class TodoStore {
   private readonly loggingService = inject(LoggingService);
   private readonly destroyRef = inject(DestroyRef);
 
-  // ✅ Private writable signals — only the store can mutate state
   private readonly todosSignal = signal<Todo[]>([]);
   private readonly loadingSignal = signal<boolean>(false);
   private readonly errorSignal = signal<string | null>(null);
@@ -27,7 +26,6 @@ export class TodoStore {
     total: 0,
   });
 
-  // ✅ Public readonly signals — components can read, never write
   readonly todos = this.todosSignal.asReadonly();
   readonly loading = this.loadingSignal.asReadonly();
   readonly error = this.errorSignal.asReadonly();

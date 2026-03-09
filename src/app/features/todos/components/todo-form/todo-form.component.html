@@ -1,7 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="outline" class="full-width">
         <mat-label>Title</mat-label>
-        <input matInput formControlName="title" placeholder="Enter todo title">
+        <input #titleInput matInput formControlName="title" placeholder="Enter todo title">
         @if (form.get('title')?.hasError('required') && form.get('title')?.touched) {
         <mat-error>Title is required</mat-error>
         }

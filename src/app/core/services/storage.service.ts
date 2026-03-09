@@ -7,7 +7,7 @@ import { STORAGE_CONFIG } from '../config/api.config';
 export class StorageService {
   setItem<T>(key: string, value: T, storage: 'local' | 'session' | 'cookie' = 'local'): void {
     const serializedValue = JSON.stringify(value);
-    
+
     switch (storage) {
       case 'local':
         localStorage.setItem(key, serializedValue);
@@ -83,14 +83,11 @@ export class StorageService {
 
   private getCookie(name: string): string | null {
     const nameEQ = `${name}=`;
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-      cookie = cookie.trim();
-      if (cookie.indexOf(nameEQ) === 0) {
-        return decodeURIComponent(cookie.substring(nameEQ.length));
-      }
-    }
-    return null;
+    const match = document.cookie
+      .split(';')
+      .map(c => c.trim())
+      .find(c => c.startsWith(nameEQ));
+    return match ? decodeURIComponent(match.substring(nameEQ.length)) : null;
   }
 
   private deleteCookie(name: string): void {

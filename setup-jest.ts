@@ -1,1 +1,2 @@
-// Zoneless setup - no zone.js needed
+const { setupZonelessTestEnv } = require('jest-preset-angular/setup-env/zoneless');
+setupZonelessTestEnv();
