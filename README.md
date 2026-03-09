@@ -1,12 +1,12 @@
 # Angular Todo App
 
-A Todo management application developed as part of a frontend technical assessment for Software One.
+Aplicación de gestión de tareas desarrollada como parte de una prueba técnica para desarrolladores frontend en Software One.
 
 ---
 
-## Getting Started
+## Primeros pasos
 
-### Prerequisites
+### Requisitos previos
 
 - Node.js >= 18
 - Angular CLI >= 21
@@ -15,31 +15,31 @@ A Todo management application developed as part of a frontend technical assessme
 npm install -g @angular/cli
 ```
 
-### Installation
+### Instalación
 
 ```bash
-git clone <your-repo-url>
+git clone <url-del-repositorio>
 cd angular-todo-app
 npm install
 ```
 
-### Run the development server
+### Ejecutar el servidor de desarrollo
 
 ```bash
 ng serve
 ```
 
-Navigate to `http://localhost:4200`. The app reloads automatically on file changes.
+Navega a `http://localhost:4200`. La aplicación se recarga automáticamente con cada cambio en los ficheros.
 
-### Build for production
+### Compilar para producción
 
 ```bash
 ng build
 ```
 
-Output is placed in the `dist/` folder.
+La salida se genera en la carpeta `dist/`.
 
-### Run tests
+### Ejecutar los tests
 
 ```bash
 npm run test:coverage
@@ -47,153 +47,156 @@ npm run test:coverage
 
 ---
 
-## Project Structure
+## Estructura del proyecto
 
 ```
 src/app
-├── core/                    # Global singleton services
-│   ├── config/              # Application configuration
-│   ├── error-handler/       # Global runtime error handler
-│   ├── interceptors/        # HTTP interceptors (auth, error)
-│   └── services/            # Core services (storage, logging, error)
-├── features/                # Feature modules
-│   ├── settings/            # User preferences
-│   └── todos/               # Todo feature
-│       ├── components/      # Todo UI components
-│       ├── dialogs/         # Feature-scoped dialog components
-│       ├── models/          # TypeScript interfaces and types
-│       ├── pages/           # Routed page components
-│       ├── services/        # Feature HTTP services
-│       └── store/           # Signals-based state store
-├── layout/                  # Shell layout component
-└── shared/                  # Shared reusable components
+├── core/                    # Servicios singleton globales
+│   ├── config/              # Configuración de la aplicación
+│   ├── error-handler/       # Manejador global de errores en tiempo de ejecución
+│   ├── interceptors/        # Interceptores HTTP (auth, errores)
+│   └── services/            # Servicios base (almacenamiento, logging, errores)
+├── features/                # Módulos de funcionalidad
+│   ├── settings/            # Preferencias de usuario
+│   └── todos/               # Funcionalidad de tareas
+│       ├── components/      # Componentes de UI de tareas
+│       ├── dialogs/         # Diálogos propios de la funcionalidad
+│       ├── models/          # Interfaces y tipos TypeScript
+│       ├── pages/           # Componentes de página con ruta
+│       ├── services/        # Servicios HTTP de la funcionalidad
+│       └── store/           # Estado basado en Signals
+├── layout/                  # Componente shell de la aplicación
+└── shared/                  # Componentes reutilizables
     └── components/          # LoadingComponent, AlertComponent
 ```
 
 ---
 
-## Requirements Review
+## Revisión de requisitos
 
-### Angular & Tooling
+### Angular y herramientas
 
-**Angular CLI 21** — visible in `package.json` line 16.
+**Angular CLI 21** — visible en `package.json`, línea 16.
 
-**TypeScript strict mode** — enabled in `tsconfig.json` line 6.
+**Modo strict de TypeScript** — activado en `tsconfig.json`, línea 6.
 
-**ESLint** — v21, configured in `devDependencies`.
+**ESLint** — v21, configurado en `devDependencies`.
 
-**Prettier** — v3.8.1, configured in `devDependencies`.
+**Prettier** — v3.8.1, configurado en `devDependencies`.
 
-**SCSS** — applied for layout and per-component styles.
+**SCSS** — aplicado en los estilos de layout y en cada componente.
 
-**Angular Material** — used as the UI component library throughout the app.
+**Angular Material** — utilizado como librería de componentes UI en toda la aplicación.
 
 ---
 
-### Components & Modules
+### Componentes y módulos
 
-Four feature components organized by responsibility:
+Cuatro componentes de funcionalidad organizados por responsabilidad:
 
-- `todo-filters` — dedicated filter UI (search + status)
-- `todo-form` — reactive form for creating and editing todos
-- `todo-item` — individual todo card
-- `todo-list` — paginated list of todo items
+- `todo-filters` — UI dedicada al filtrado (búsqueda y estado)
+- `todo-form` — formulario reactivo para crear y editar tareas
+- `todo-item` — tarjeta individual de una tarea
+- `todo-list` — lista paginada de tareas
 
-Communication between components uses `input()`/`output()` signals throughout. `TodoService` handles all API interactions via Observables.
+La comunicación entre componentes se gestiona mediante señales `input()`/`output()`. `TodoService` gestiona todas las interacciones con la API a través de Observables.
 
-**A note on ViewChild/ViewChildren** — these were not used as no justified use case was found. Child component communication is handled entirely via `input()`/`output()` signals, and direct DOM access was not required thanks to Angular Material's built-in focus management. Using `ViewChild` artificially to tick a requirement box would contradict the modern Angular practices applied throughout the codebase.
+**Nota sobre ViewChild/ViewChildren** — no se han utilizado al no encontrar ningún caso de uso que lo justificase. La comunicación con componentes hijos se gestiona completamente mediante señales `input()`/`output()`, y el acceso directo al DOM no fue necesario gracias a la gestión automática de foco de Angular Material. Utilizar `ViewChild` de forma artificial para cumplir un requisito contradiría las buenas prácticas de Angular moderno aplicadas en el resto del código.
 
 ---
 
 ### Lazy Loading
 
-Lazy loading is implemented for all feature routes in `app.routes.ts`. Each feature loads its component only when the route is first visited.
+Se ha implementado lazy loading para todas las rutas de funcionalidad en `app.routes.ts`. Cada módulo carga su componente únicamente cuando se visita la ruta por primera vez.
 
 ---
 
-### Interceptors
+### Interceptores
 
-Two interceptors are configured in `src/app/core/interceptors`:
+Dos interceptores configurados en `src/app/core/interceptors`:
 
-- **Auth interceptor** — simulated since no real authentication system is in scope. Behaves exactly as a real auth interceptor would but injects a fixed token placeholder that does not break API calls.
-- **Error interceptor** — global HTTP error handler that maps status codes to user-friendly messages, logs them via `LoggingService`, and surfaces them through `ErrorService` to the `AlertComponent`.
-
----
-
-### Change Detection
-
-**A note on OnPush and ChangeDetectorRef** — these are pre-signals patterns for manual change detection control. Since this app uses Angular Signals throughout, Angular's reactivity is already granular by design. Adding `OnPush` or `ChangeDetectorRef` manually would be redundant and would contradict the signals-first approach.
-
-**TrackBy** — fully implemented via the `track` expression in Angular 17+'s built-in `@for` syntax in `todo-list.component.html`. This replaces the legacy `*ngFor [trackBy]` pattern and achieves the same DOM reuse optimization.
+- **Interceptor de autenticación** — simulado al no contar con un sistema de autenticación real en el alcance de la prueba. Funciona exactamente igual que uno real pero inyecta un token fijo que no rompe las llamadas a la API.
+- **Interceptor de errores** — manejador global de errores HTTP que mapea códigos de estado a mensajes comprensibles para el usuario, los registra mediante `LoggingService` y los muestra a través de `ErrorService` y `AlertComponent`.
 
 ---
 
-### Standalone Components
+### Detección de cambios
 
-All components in this application are standalone — this is the Angular 21 default and best practice. No `NgModule` declarations exist anywhere in the codebase.
+**Nota sobre OnPush y ChangeDetectorRef** — estos son patrones previos a las señales para el control manual de la detección de cambios. Al utilizar Angular Signals en toda la aplicación, la reactividad ya es granular por diseño. Añadir `OnPush` o `ChangeDetectorRef` de forma manual sería redundante y contradiría el enfoque signals-first aplicado en el proyecto.
 
-Utility components: `LoadingComponent` and `AlertComponent` in `src/app/shared/components`.
-
-Business components consuming services: `TodosPageComponent`, `TodoDetailPageComponent`, and others throughout the todos feature.
+**TrackBy** — implementado mediante la expresión `track` de la sintaxis `@for` integrada en Angular 17+, visible en `todo-list.component.html`. Esto reemplaza el patrón heredado `*ngFor [trackBy]` y consigue la misma optimización de reutilización del DOM.
 
 ---
 
-### API Integration
+### Componentes Standalone
 
-Built on the [JSONPlaceholder API](https://jsonplaceholder.typicode.com/) as required. Full CRUD operations are implemented (Create, Read, Update, Delete).
+Todos los componentes de esta aplicación son standalone — este es el comportamiento por defecto y la buena práctica en Angular 21. No existe ningún `NgModule` en todo el proyecto.
 
-Since JSONPlaceholder does not persist write operations, all mutations are tracked locally via a signal-based overlay layer in the store and synced to `localStorage`. This means created, updated, and deleted todos survive page reloads, simulating a real persistent backend.
+Componentes de utilidad: `LoadingComponent` y `AlertComponent` en `src/app/shared/components`.
 
-Loading, error, and success states are handled globally via `TodoStore`, `ErrorService`, and the `AlertComponent`.
-
-Pagination and filtering (search + status) are fully implemented.
+Componentes de negocio que consumen servicios: `TodosPageComponent`, `TodoDetailPageComponent` y otros a lo largo de la funcionalidad de tareas.
 
 ---
 
-### Cookie & Local Storage Management
+### Integración con API
 
-`StorageService` (`src/app/core/services/storage.service.ts`) provides a unified API for all three browser storage mechanisms:
+Construido sobre la [JSONPlaceholder API](https://jsonplaceholder.typicode.com/) tal como se requería. Se han implementado operaciones CRUD completas (Crear, Leer, Actualizar, Eliminar).
 
-| Storage | Used for |
+Dado que JSONPlaceholder no persiste las operaciones de escritura, todas las mutaciones se registran localmente mediante una capa de señales superpuesta en el store y se sincronizan con `localStorage`. Esto permite que las tareas creadas, actualizadas y eliminadas sobrevivan a recargas de página, simulando un backend real con persistencia.
+
+Los estados de carga, error y éxito se gestionan globalmente a través de `TodoStore`, `ErrorService` y `AlertComponent`.
+
+La paginación y el filtrado (búsqueda por texto y por estado) están completamente implementados.
+
+---
+
+### Gestión de cookies y almacenamiento local
+
+`StorageService` (`src/app/core/services/storage.service.ts`) ofrece una API unificada para los tres mecanismos de almacenamiento del navegador:
+
+| Almacenamiento | Uso |
 |---|---|
-| `localStorage` | Favorites (persistent across sessions) |
-| `sessionStorage` | Active filters (cleared when tab closes) |
-| `cookie` | Theme and language preferences |
+| `localStorage` | Favoritos (persistentes entre sesiones) |
+| `sessionStorage` | Filtros activos (se borran al cerrar la pestaña) |
+| `cookie` | Preferencias de tema e idioma |
 
-All three support generic `setItem<T>`, `getItem<T>`, `removeItem`, and `clear` methods.
-
----
-
-### Reactive Forms & Validation
-
-`TodoFormComponent` implements a reactive form with:
-
-- **Synchronous validators** — required, minlength (3), maxlength (100), min value
-- **Async validator** — duplicate title detection against existing todos
-- **User-friendly error messages** — inline errors displayed per field on touch
-- **Submit guard** — button disabled while form is invalid, pending, or submitting
+Los tres soportan métodos genéricos `setItem<T>`, `getItem<T>`, `removeItem` y `clear`.
 
 ---
 
-### Error Handling & Logging
+### Formularios reactivos y validaciones
 
-Three layers of error handling:
+`TodoFormComponent` implementa un formulario reactivo con:
 
-- **HTTP errors** — `ErrorInterceptor` maps status codes to messages, logs via `LoggingService`, and surfaces them to the UI via `AlertComponent`
-- **Runtime errors** — `GlobalErrorHandler` (`src/app/core/error-handler/`) catches any unhandled JavaScript exceptions via Angular's `ErrorHandler` token
-- **Validation errors** — inline form field errors handled directly in `TodoFormComponent`. A dedicated `ValidationErrorService` centralises error message mapping for reuse across forms
+- **Validadores síncronos** — requerido, longitud mínima (3), longitud máxima (100), valor mínimo
+- **Validador asíncrono** — detección de títulos duplicados contra las tareas existentes
+- **Mensajes de error amigables** — errores en línea por campo, mostrados al interactuar
+- **Bloqueo del envío** — botón deshabilitado mientras el formulario es inválido, pendiente o se está enviando
 
 ---
 
-### Unit Testing
+### Manejo de errores y logging
 
-Jest is configured as the test runner with a zoneless environment. Tests are written for:
+Tres capas de gestión de errores:
 
-- `TodoItemComponent` — 100% coverage
-- `TodoFormComponent` — 100% coverage
-- `TodoService` — 100% coverage
+- **Errores HTTP** — `ErrorInterceptor` mapea códigos de estado a mensajes, los registra mediante `LoggingService` y los muestra en la UI a través de `AlertComponent`
+- **Errores en tiempo de ejecución** — `GlobalErrorHandler` (`src/app/core/error-handler/`) captura cualquier excepción JavaScript no controlada mediante el token `ErrorHandler` de Angular
+- **Errores de validación** — errores en línea gestionados directamente en `TodoFormComponent`. Un `ValidationErrorService` dedicado centraliza el mapeo de mensajes de error para su reutilización en otros formularios
 
-Tests use `HttpTestingController` for HTTP assertions, `ComponentRef.setInput()` for signal inputs, and `flushPromises` for async validators in a zoneless environment.
+- **Prueba de errores** — como bien comentamos antes, el api proporcionada no cuenta con escritura funcional, por lo cual los elementos que creemos nosotros se crean simuladamente en nuestro local, se podría haber montado un sistema de mockeo que funcionase guardando los mismos en el storage y trabajando sobre ello en vez de contra la API, pero hemos preferido dejarlo así para poder tener casos seguros de errores controlados que lancen los interceptores y el alert desarrollado.
+Estos casos son la edición y el borrado de cualquier tarea que creemos nosotros. 
+
+---
+
+### Testing unitario
+
+Jest está configurado como runner de tests en un entorno zoneless. Se han escrito tests para:
+
+- `TodoItemComponent` — cobertura del 100%
+- `TodoFormComponent` — cobertura del 100%
+- `TodoService` — cobertura del 100%
+
+Los tests utilizan `HttpTestingController` para las aserciones HTTP, `ComponentRef.setInput()` para las señales de entrada, y `flushPromises` para los validadores asíncronos en el entorno zoneless.
 
 ```bash
 npm run test:coverage
