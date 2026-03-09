@@ -1,0 +1,21 @@
+<mat-card class="todo-item" [class.completed]="todo().completed">
+    <div class="todo-content">
+        <mat-checkbox [checked]="todo().completed" (change)="toggleComplete.emit(todo().id)" color="primary">
+        </mat-checkbox>
+        <div class="todo-info">
+            <span class="todo-title">{{ todo().title }}</span>
+            <span class="todo-id">#{{ todo().id }}</span>
+        </div>
+        <div class="todo-actions">
+            <button mat-icon-button (click)="toggleFavorite.emit(todo().id)" [color]="isFavorite() ? 'accent' : 'default'">
+                <mat-icon>{{ isFavorite() ? 'star' : 'star_border' }}</mat-icon>
+            </button>
+            <button mat-icon-button (click)="edit.emit(todo().id)">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="delete.emit(todo().id)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    </div>
+</mat-card>

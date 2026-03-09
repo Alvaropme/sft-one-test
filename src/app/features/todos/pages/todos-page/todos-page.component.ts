@@ -8,7 +8,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TodoStore } from '../../store/todo.store';
 import { TodoListComponent } from '../../components/todo-list/todo-list.component';
 import { TodoFiltersComponent } from '../../components/todo-filters/todo-filters.component';
-import { TodoFormDialogComponent } from '../../todos-form-dialog/todo-form-dialog.component';
+import { TodoFormDialogComponent, TodoFormDialogData } from '../../todos-form-dialog/todo-form-dialog.component';
 import { AlertComponent } from '../../../../shared/components/alert/alert.component';
 import { Todo, TodoFilter } from '../../models/todo.model';
 
@@ -83,7 +83,7 @@ export class TodosPageComponent {
     });
   }
 
-  private openTodoDialog(data: { mode: 'create' | 'edit'; todo?: Todo; existingTitles: string[] }): void {
+  private openTodoDialog(data: TodoFormDialogData): void {
     this.dialog
       .open(TodoFormDialogComponent, { width: '500px', data })
       .afterClosed()

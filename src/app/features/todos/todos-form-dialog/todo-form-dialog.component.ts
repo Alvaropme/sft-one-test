@@ -1,20 +1,24 @@
-import { CommonModule } from "@angular/common";
-import { Component, Inject } from "@angular/core";
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { TodoFormComponent } from "../components/todo-form/todo-form.component";
-import { Todo, CreateTodoDto, UpdateTodoDto } from "../models/todo.model";
+import { Component, inject } from '@angular/core';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+import { TodoFormComponent } from '../components/todo-form/todo-form.component';
+import { Todo, CreateTodoDto, UpdateTodoDto } from '../models/todo.model';
+
+export interface TodoFormDialogData {
+  mode: 'create' | 'edit';
+  todo?: Todo;
+  existingTitles: string[];
+}
 
 @Component({
   selector: 'app-todo-form-dialog',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, TodoFormComponent],
-  templateUrl: './todo-form-dialog.component.html'
+  imports: [MatDialogModule, TodoFormComponent],
+  templateUrl: './todo-form-dialog.component.html',
 })
 export class TodoFormDialogComponent {
-  constructor(
-    public dialogRef: MatDialogRef<TodoFormDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { mode: 'create' | 'edit'; todo?: Todo; existingTitles: string[] }
-  ) {}
+  readonly dialogRef = inject(MatDialogRef<TodoFormDialogComponent>);
+  readonly data = inject<TodoFormDialogData>(MAT_DIALOG_DATA);
 
   onCreate(todo: CreateTodoDto): void {
     this.dialogRef.close(todo);

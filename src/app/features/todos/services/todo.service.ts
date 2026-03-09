@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
+
 import { API_CONFIG } from '../../../core/config/api.config';
 import { Todo, CreateTodoDto, UpdateTodoDto, TodoFilter } from '../models/todo.model';
 
@@ -8,33 +9,27 @@ import { Todo, CreateTodoDto, UpdateTodoDto, TodoFilter } from '../models/todo.m
   providedIn: 'root',
 })
 export class TodoService {
-  private http = inject(HttpClient);
-  private baseUrl = API_CONFIG.baseUrl + API_CONFIG.todosEndpoint;
+  private readonly http = inject(HttpClient);
+  private readonly baseUrl = `${API_CONFIG.baseUrl}${API_CONFIG.todosEndpoint}`;
 
   getTodos(page = 1, limit = 10, filter?: TodoFilter): Observable<{ todos: Todo[]; total: number }> {
     let params = new HttpParams()
-      .set('_page', page.toString())
-      .set('_limit', limit.toString());
+      .set('_page', page)
+      .set('_limit', limit);
 
-    if (filter) {
-      if (filter.completed !== undefined && filter.completed !== null) {
-        params = params.set('completed', filter.completed.toString());
-      }
-      if (filter.search) {
-        params = params.set('q', filter.search);
-      }
+    if (filter?.completed !== undefined && filter.completed !== null) {
+      params = params.set('completed', filter.completed.toString());
+    }
+    if (filter?.search) {
+      params = params.set('q', filter.search);
     }
 
-    return this.http.get<Todo[]>(this.baseUrl, { params }).pipe(
-      map(todos => ({
-        todos,
-        total: todos.length,
+    return this.http.get<Todo[]>(this.baseUrl, { params, observe: 'response' }).pipe(
+      map(response => ({
+        todos: response.body ?? [],
+        total: Number(response.headers.get('X-Total-Count') ?? 0),
       }))
     );
-  }
-
-  getAllTodos(): Observable<Todo[]> {
-    return this.http.get<Todo[]>(this.baseUrl);
   }
 
   getTodoById(id: number): Observable<Todo> {
@@ -51,9 +46,5 @@ export class TodoService {
 
   deleteTodo(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
-  }
-
-  toggleTodoComplete(id: number, completed: boolean): Observable<Todo> {
-    return this.updateTodo(id, { completed });
   }
 }

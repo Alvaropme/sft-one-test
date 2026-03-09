@@ -10,8 +10,8 @@
             </button>
         </div>
 
-        <app-todo-list [todos]="store.filteredTodos" [favorites]="store.favorites" [pagination]="store.pagination"
-            [loading]="store.loading" (toggleComplete)="onToggleComplete($event)"
+        <app-todo-list [todos]="store.filteredTodos()" [favorites]="store.favorites()" [pagination]="store.pagination()"
+            [loading]="store.loading()" (toggleComplete)="onToggleComplete($event)"
             (toggleFavorite)="onToggleFavorite($event)" (edit)="openEditDialog($event)" (delete)="onDelete($event)"
             (pageChange)="onPageChange($event)">
         </app-todo-list>
