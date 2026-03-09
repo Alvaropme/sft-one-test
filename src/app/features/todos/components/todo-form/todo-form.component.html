@@ -1,0 +1,42 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Title</mat-label>
+        <input #titleInput matInput formControlName="title" placeholder="Enter todo title">
+        @if (form.get('title')?.hasError('required') && form.get('title')?.touched) {
+        <mat-error>Title is required</mat-error>
+        }
+        @if (form.get('title')?.hasError('minlength') && form.get('title')?.touched) {
+        <mat-error>Title must be at least 3 characters</mat-error>
+        }
+        @if (form.get('title')?.hasError('maxlength') && form.get('title')?.touched) {
+        <mat-error>Title must not exceed 100 characters</mat-error>
+        }
+        @if (form.get('title')?.hasError('duplicate') && form.get('title')?.touched) {
+        <mat-error>This title already exists</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>User ID</mat-label>
+        <input matInput type="number" formControlName="userId" placeholder="Enter user ID">
+        @if (form.get('userId')?.hasError('required') && form.get('userId')?.touched) {
+        <mat-error>User ID is required</mat-error>
+        }
+        @if (form.get('userId')?.hasError('min') && form.get('userId')?.touched) {
+        <mat-error>User ID must be at least 1</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-checkbox formControlName="completed">Completed</mat-checkbox>
+
+    <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || form.pending || submitting()">
+            @if (submitting()) {
+            <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+            {{ isEditMode() ? 'Update' : 'Create' }}
+            }
+        </button>
+        <button mat-button type="button" (click)="cancel.emit()">Cancel</button>
+    </div>
+</form>

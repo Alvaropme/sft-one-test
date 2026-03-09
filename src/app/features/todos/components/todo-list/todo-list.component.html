@@ -1,0 +1,25 @@
+<div class="todo-list-container">
+    @if (loading()) {
+    <app-loading [overlay]="true" message="Loading todos..."></app-loading>
+    }
+
+    @if (!loading() && todos().length === 0) {
+    <div class="empty-state">
+        <span class="empty-icon">📝</span>
+        <p>No todos found</p>
+        <p class="empty-hint">Create a new todo to get started!</p>
+    </div>
+    }
+
+    @for (todo of todos(); track todo.id) {
+    <app-todo-item [todo]="todo" [isFavorite]="isFavorite(todo.id)" (toggleComplete)="toggleComplete.emit($event)"
+        (toggleFavorite)="toggleFavorite.emit($event)" (edit)="edit.emit($event)" (delete)="delete.emit($event)">
+    </app-todo-item>
+    }
+
+    @if (todos().length > 0) {
+    <mat-paginator [length]="pagination().total" [pageSize]="pagination().pageSize" [pageIndex]="pagination().page - 1"
+         (page)="onPageChange($event)" aria-label="Select page">
+    </mat-paginator>
+    }
+</div>

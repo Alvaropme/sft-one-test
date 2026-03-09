@@ -1,0 +1,19 @@
+<div class="todos-page">
+    <div class="content">
+        <app-alert [useErrorService]="true"></app-alert>
+
+        <div class="header-actions">
+            <app-todo-filters (filterChange)="onFilterChange($event)"></app-todo-filters>
+            <button mat-raised-button color="accent" (click)="openCreateDialog()">
+                <mat-icon>add</mat-icon>
+                New Todo
+            </button>
+        </div>
+
+        <app-todo-list [todos]="store.filteredTodos()" [favorites]="store.favorites()" [pagination]="store.pagination()"
+            [loading]="store.loading()" (toggleComplete)="onToggleComplete($event)"
+            (toggleFavorite)="onToggleFavorite($event)" (edit)="openEditDialog($event)" (delete)="onDelete($event)"
+            (pageChange)="onPageChange($event)">
+        </app-todo-list>
+    </div>
+</div>
