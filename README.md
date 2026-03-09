@@ -1,6 +1,7 @@
 # Angular Todo App
 
 Aplicación de gestión de tareas desarrollada como parte de una prueba técnica para desarrolladores frontend en Software One.
+Se trata de una simple aplicación de tareas, ya que era una de las aplicaciones recomendadas en las bases de la prueba y la que mas encajaba con el API proporcionada.
 
 ---
 
@@ -99,9 +100,9 @@ Cuatro componentes de funcionalidad organizados por responsabilidad:
 - `todo-item` — tarjeta individual de una tarea
 - `todo-list` — lista paginada de tareas
 
-La comunicación entre componentes se gestiona mediante señales `input()`/`output()`. `TodoService` gestiona todas las interacciones con la API a través de Observables.
+La comunicación entre componentes se gestiona mediante signals `input()`/`output()`. `TodoService` gestiona todas las interacciones con la API a través de Observables.
 
-**Nota sobre ViewChild/ViewChildren** — no se han utilizado al no encontrar ningún caso de uso que lo justificase. La comunicación con componentes hijos se gestiona completamente mediante señales `input()`/`output()`, y el acceso directo al DOM no fue necesario gracias a la gestión automática de foco de Angular Material. Utilizar `ViewChild` de forma artificial para cumplir un requisito contradiría las buenas prácticas de Angular moderno aplicadas en el resto del código.
+**Nota sobre ViewChild/ViewChildren** — no se han utilizado al no encontrar ningún caso de uso que lo justificase. La comunicación con componentes hijos se gestiona completamente mediante signals `input()`/`output()`, y el acceso directo al DOM no fue necesario gracias a la gestión automática de foco de Angular Material. Utilizar `ViewChild` de forma artificial para cumplir un requisito contradiría las buenas prácticas de Angular moderno aplicadas en el resto del código.
 
 ---
 
@@ -122,7 +123,7 @@ Dos interceptores configurados en `src/app/core/interceptors`:
 
 ### Detección de cambios
 
-**Nota sobre OnPush y ChangeDetectorRef** — estos son patrones previos a las señales para el control manual de la detección de cambios. Al utilizar Angular Signals en toda la aplicación, la reactividad ya es granular por diseño. Añadir `OnPush` o `ChangeDetectorRef` de forma manual sería redundante y contradiría el enfoque signals-first aplicado en el proyecto.
+**Nota sobre OnPush y ChangeDetectorRef** — estos son patrones previos a las signals para el control manual de la detección de cambios. Al utilizar Angular Signals en toda la aplicación, la reactividad ya es granular por diseño. Añadir `OnPush` o `ChangeDetectorRef` de forma manual sería redundante y contradiría el enfoque signals-first aplicado en el proyecto.
 
 **TrackBy** — implementado mediante la expresión `track` de la sintaxis `@for` integrada en Angular 17+, visible en `todo-list.component.html`. Esto reemplaza el patrón heredado `*ngFor [trackBy]` y consigue la misma optimización de reutilización del DOM.
 
@@ -142,7 +143,7 @@ Componentes de negocio que consumen servicios: `TodosPageComponent`, `TodoDetail
 
 Construido sobre la [JSONPlaceholder API](https://jsonplaceholder.typicode.com/) tal como se requería. Se han implementado operaciones CRUD completas (Crear, Leer, Actualizar, Eliminar).
 
-Dado que JSONPlaceholder no persiste las operaciones de escritura, todas las mutaciones se registran localmente mediante una capa de señales superpuesta en el store y se sincronizan con `localStorage`. Esto permite que las tareas creadas, actualizadas y eliminadas sobrevivan a recargas de página, simulando un backend real con persistencia.
+Dado que JSONPlaceholder no persiste las operaciones de escritura, todas las mutaciones se registran localmente mediante una capa de signals superpuesta en el store y se sincronizan con `localStorage`. Esto permite que las tareas creadas, actualizadas y eliminadas sobrevivan a recargas de página, simulando un backend real con persistencia.
 
 Los estados de carga, error y éxito se gestionan globalmente a través de `TodoStore`, `ErrorService` y `AlertComponent`.
 
@@ -196,7 +197,7 @@ Jest está configurado como runner de tests en un entorno zoneless. Se han escri
 - `TodoFormComponent` — cobertura del 100%
 - `TodoService` — cobertura del 100%
 
-Los tests utilizan `HttpTestingController` para las aserciones HTTP, `ComponentRef.setInput()` para las señales de entrada, y `flushPromises` para los validadores asíncronos en el entorno zoneless.
+Los tests utilizan `HttpTestingController` para las aserciones HTTP, `ComponentRef.setInput()` para las signals de entrada, y `flushPromises` para los validadores asíncronos en el entorno zoneless.
 
 ```bash
 npm run test:coverage
