@@ -32,11 +32,9 @@ describe('TodoService', () => {
   });
 
   afterEach(() => {
-    // Verifies no unexpected requests were made
     httpMock.verify();
   });
 
-  // ─── getTodos ─────────────────────────────────────────────────────────
 
   describe('getTodos', () => {
     it('should fetch todos with default pagination', () => {
@@ -118,7 +116,6 @@ describe('TodoService', () => {
     });
   });
 
-  // ─── getTodoById ──────────────────────────────────────────────────────
 
   describe('getTodoById', () => {
     it('should fetch a todo by id', () => {
@@ -132,7 +129,6 @@ describe('TodoService', () => {
     });
   });
 
-  // ─── createTodo ───────────────────────────────────────────────────────
 
   describe('createTodo', () => {
     it('should create a todo', () => {
@@ -149,7 +145,6 @@ describe('TodoService', () => {
     });
   });
 
-  // ─── updateTodo ───────────────────────────────────────────────────────
 
   describe('updateTodo', () => {
     it('should update a todo', () => {
@@ -166,7 +161,6 @@ describe('TodoService', () => {
     });
   });
 
-  // ─── deleteTodo ───────────────────────────────────────────────────────
 
   describe('deleteTodo', () => {
     it('should delete a todo', () => {

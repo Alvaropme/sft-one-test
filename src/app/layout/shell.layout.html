@@ -1,0 +1,13 @@
+<mat-toolbar [color]="theme()">
+  <span>Todo App</span>
+  <span class="spacer"></span>
+  <button mat-icon-button (click)="toggleTheme()">
+    <mat-icon>{{ theme() === 'primary' ? 'dark_mode' : 'light_mode' }}</mat-icon>
+  </button>
+  <button mat-icon-button (click)="toggleLanguage()">
+    {{ language().toUpperCase() }}
+  </button>
+</mat-toolbar>
+<main class="layout-content">
+  <router-outlet></router-outlet>
+</main>

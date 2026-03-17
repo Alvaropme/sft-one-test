@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { ShellLayoutComponent } from './layout/shell.layout.ts/shell.layout.ts';
+import { ShellLayoutComponent } from './layout/shell.layout';
 
 export const routes: Routes = [
   {
     path: '',
-    component: ShellLayoutComponent,   // ← shell wraps all children
+    component: ShellLayoutComponent,
     children: [
       {
         path: '',

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { STORAGE_CONFIG } from '../config/api.config';
+import { Language, Theme } from '../../layout/models/shell.layout.models';
 
 @Injectable({
   providedIn: 'root',
@@ -119,16 +120,18 @@ export class StorageService {
     this.setItem(STORAGE_CONFIG.sessionStorageKeys.filters, filters, 'session');
   }
 
-  getTheme(): string {
-    return this.getItem<string>(STORAGE_CONFIG.cookieKeys.theme, 'cookie') ?? 'light';
+  getTheme(): Theme {
+    const theme = this.getItem<string>(STORAGE_CONFIG.cookieKeys.theme, 'cookie');
+    return (theme === 'primary' || theme === 'accent') ? theme : 'primary';
   }
 
   setTheme(theme: string): void {
     this.setItem(STORAGE_CONFIG.cookieKeys.theme, theme, 'cookie');
   }
 
-  getLanguage(): string {
-    return this.getItem<string>(STORAGE_CONFIG.cookieKeys.language, 'cookie') ?? 'en';
+  getLanguage(): Language {
+    const language = this.getItem<string>(STORAGE_CONFIG.cookieKeys.language, 'cookie');
+    return (language === 'es' || language === 'en') ? language : 'es';
   }
 
   setLanguage(language: string): void {
