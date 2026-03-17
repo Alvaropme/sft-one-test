@@ -34,21 +34,6 @@ export class TodoStore {
   readonly filter = this.filterSignal.asReadonly();
   readonly pagination = this.paginationSignal.asReadonly();
 
-  readonly filteredTodos = computed(() => {
-    const todos = this.todosSignal();
-    const filter = this.filterSignal();
-
-    return todos.filter(todo => {
-      const matchesSearch = filter.search
-        ? todo.title.toLowerCase().includes(filter.search.toLowerCase())
-        : true;
-      const matchesStatus = filter.completed !== undefined
-        ? todo.completed === filter.completed
-        : true;
-      return matchesSearch && matchesStatus;
-    });
-  });
-
   constructor() {
     effect(() => {
       this.storageService.setFavorites(this.favoritesSignal());
@@ -195,11 +180,4 @@ export class TodoStore {
     this.loadTodos(page, this.paginationSignal().pageSize);
   }
 
-  clearSelectedTodo(): void {
-    this.selectedTodoSignal.set(null);
-  }
-
-  clearError(): void {
-    this.errorSignal.set(null);
-  }
 }
