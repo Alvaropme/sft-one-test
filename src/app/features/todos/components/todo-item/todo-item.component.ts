@@ -1,4 +1,5 @@
 import { Component, input, output } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,7 +10,7 @@ import { Todo } from '../../models/todo.model';
 @Component({
   selector: 'app-todo-item',
   standalone: true,
-  imports: [MatCardModule, MatCheckboxModule, MatIconModule, MatButtonModule],
+  imports: [RouterLink, MatCardModule, MatCheckboxModule, MatIconModule, MatButtonModule],
   templateUrl: './todo-item.component.html',
   styleUrl: './todo-item.component.scss',
 })
